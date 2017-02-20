@@ -1,5 +1,10 @@
 package lettersGame;
 
+/**
+ * Main method to test letters game.
+ * @author BothaJ
+ *
+ */
 public class ExecuteLetters {
 
   public static void main(String[] args) {

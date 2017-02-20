@@ -1,5 +1,10 @@
 package numbersGame;
 
+/**
+ * Main method to test numbers game.
+ * @author BothaJ
+ *
+ */
 public class ExecuteNumbers {
 
   public static void main(String[] args) {

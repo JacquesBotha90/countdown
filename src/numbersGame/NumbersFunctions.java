@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ * Class containing all functions required for numbers game.
+ * @author BothaJ
+ *
+ */
 public class NumbersFunctions {
 
   public static ArrayList<int[]> combinationsList = new ArrayList<int[]>();

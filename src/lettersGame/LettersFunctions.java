@@ -11,16 +11,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class containing all functions required for letters game.
+ * @author BothaJ
+ *
+ */
 public class LettersFunctions {
-  
-  public static class ConundrumSolution{
+
+  /**
+   * A simple object to store the scrambled and unscrambled word for the
+   * conundrum.
+   * 
+   * @author BothaJ
+   *
+   */
+  public static class ConundrumSolution {
     public String word;
     public String scrambledWord;
-    
-    public ConundrumSolution(String unscrambled, String scrambled){
+
+    public ConundrumSolution(String unscrambled, String scrambled) {
       this.word = unscrambled;
       this.scrambledWord = scrambled;
-    }  
+    }
   }
 
   public static HashSet<String> wordList = new HashSet<String>();
@@ -44,9 +56,9 @@ public class LettersFunctions {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    for(String word : lines){
+    for (String word : lines) {
       wordList.add(word);
-      if(word.length() == 9){
+      if (word.length() == 9) {
         nineLetterWords.add(word);
       }
     }
@@ -191,21 +203,26 @@ public class LettersFunctions {
       generatePermutations(startingPosition + 1, input);
     }
   }
-  
-  public static ConundrumSolution runConundrum(){
+
+  /**
+   * Randomly select a 9 letter word and shuffle the letters. Both the original
+   * word and the scrambled word is passed.
+   * 
+   * @return
+   */
+  public static ConundrumSolution runConundrum() {
     Random randomizer = new Random();
-    String word = nineLetterWords.get(randomizer.nextInt(nineLetterWords.size()));
-    ArrayList<String> letters = new ArrayList<String>(); 
+    String word = nineLetterWords
+        .get(randomizer.nextInt(nineLetterWords.size()));
+    ArrayList<String> letters = new ArrayList<String>();
     letters.addAll(Arrays.asList(word.split("")));
     String scrambled = "";
-    while(!letters.isEmpty()){
+    while (!letters.isEmpty()) {
       int r = randomizer.nextInt(letters.size());
       scrambled += letters.get(r);
       letters.remove(r);
     }
-    return new ConundrumSolution(word, scrambled);    
+    return new ConundrumSolution(word, scrambled);
   }
 
 }
-
-
