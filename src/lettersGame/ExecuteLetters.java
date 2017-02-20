@@ -28,6 +28,11 @@ public class ExecuteLetters {
     for (String s : LettersFunctions.validWords) {
       System.out.println(s);
     }
+    
+    // Test conundrum
+    LettersFunctions.ConundrumSolution solution = LettersFunctions.runConundrum();
+    System.out.println("Your scrambled conundrum is: "+solution.scrambledWord);
+    System.out.println("The word is: "+solution.word);
 
     // Stop Timer
     double stopTime = System.currentTimeMillis();

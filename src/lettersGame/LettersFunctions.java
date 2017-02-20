@@ -5,12 +5,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 public class LettersFunctions {
+  
+  public static class ConundrumSolution{
+    public String word;
+    public String scrambledWord;
+    
+    public ConundrumSolution(String unscrambled, String scrambled){
+      this.word = unscrambled;
+      this.scrambledWord = scrambled;
+    }  
+  }
 
   public static HashSet<String> wordList = new HashSet<String>();
   public static ArrayList<String> vowelPile = new ArrayList<String>();
@@ -18,9 +29,10 @@ public class LettersFunctions {
   public static ArrayList<String[]> combinationsList = new ArrayList<String[]>();
   public static ArrayList<String[]> permutationsList = new ArrayList<String[]>();
   public static ArrayList<String> validWords = new ArrayList<String>();
+  public static ArrayList<String> nineLetterWords = new ArrayList<String>();
 
   /**
-   * Generates the list of valid words.
+   * Generates the lists of valid words.
    */
   public static void generateWordList() {
     ClassLoader classLoader = LettersFunctions.class.getClassLoader();
@@ -29,12 +41,15 @@ public class LettersFunctions {
     List<String> lines = new ArrayList<String>();
     try {
       lines = Files.readAllLines(path);
-
     } catch (IOException e) {
       e.printStackTrace();
     }
-    wordList.addAll(lines);
-
+    for(String word : lines){
+      wordList.add(word);
+      if(word.length() == 9){
+        nineLetterWords.add(word);
+      }
+    }
   }
 
   /**
@@ -176,5 +191,21 @@ public class LettersFunctions {
       generatePermutations(startingPosition + 1, input);
     }
   }
+  
+  public static ConundrumSolution runConundrum(){
+    Random randomizer = new Random();
+    String word = nineLetterWords.get(randomizer.nextInt(nineLetterWords.size()));
+    ArrayList<String> letters = new ArrayList<String>(); 
+    letters.addAll(Arrays.asList(word.split("")));
+    String scrambled = "";
+    while(!letters.isEmpty()){
+      int r = randomizer.nextInt(letters.size());
+      scrambled += letters.get(r);
+      letters.remove(r);
+    }
+    return new ConundrumSolution(word, scrambled);    
+  }
 
 }
+
+
