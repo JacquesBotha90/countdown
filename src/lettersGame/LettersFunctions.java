@@ -13,6 +13,7 @@ import java.util.Random;
 
 /**
  * Class containing all functions required for letters game.
+ * 
  * @author BothaJ
  *
  */
@@ -125,6 +126,40 @@ public class LettersFunctions {
       }
     }
     return selectedLetters;
+  }
+
+  /**
+   * Returns a single letter based on the user's choice.
+   * 
+   * @param choice
+   *          Must be either "c" or "v", case insensitive.
+   * @return
+   */
+  public static String chooseLetter(String choice) {
+
+    Random random = new Random();
+    String selected;
+    switch (choice) {
+    case "c":
+    case "C": {
+      int r = random.nextInt(consonantPile.size());
+      selected = consonantPile.get(r);
+      consonantPile.remove(r);
+      break;
+    }
+    case "v":
+    case "V": {
+      int r = random.nextInt(vowelPile.size());
+      selected = vowelPile.get(r);
+      vowelPile.remove(r);
+      break;
+    }
+    default: {
+      selected = "";
+      break;
+    }
+    }
+    return selected;
   }
 
   /**

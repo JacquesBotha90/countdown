@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import numbersGame.NumbersFunctions;
 import lettersGame.LettersFunctions;
+import numbersGame.NumbersFunctions;
 
 /**
  * Class that controls game flow and player details.
@@ -88,7 +88,47 @@ public class GameMaster {
    * @param sc
    */
   public void lettersRound(Scanner sc) {
-    startTimer();
+    LettersFunctions.refreshLetterPiles();
+    String[] letters = new String[9];
+    int numChosen = 0;
+    int numVowels = 0;
+    int numConsonants = 0;
+    while (numChosen <= 9) {
+      try {
+        System.out.println("Would you like a vowel or a consonant (V/C)?");
+        String choice = sc.nextLine();
+        if (!choice.equalsIgnoreCase("c") && !choice.equalsIgnoreCase("v")) {
+          throw new InputMismatchException();
+        }
+        if (numConsonants == 6 && choice.equalsIgnoreCase("c")) {
+          throw new java.lang.Exception("Maximum number of consonants "
+              + "reached. Please choose a vowel.");
+        }
+        if (numVowels == 5 && choice.equalsIgnoreCase("v")) {
+          throw new java.lang.Exception("Maximum number of vowels "
+              + "reached. Please choose a consonant.");
+        }
+        letters[numChosen++] = LettersFunctions.chooseLetter(choice);
+        if (choice.equalsIgnoreCase("c")) {
+          numConsonants++;
+        } else {
+          numVowels++;
+        }
+        System.out.print("Letters: ");
+        for (String s : letters) {
+          if (s == null) {
+            break;
+          }
+          System.out.print(s.toUpperCase() + " ");
+        }
+        System.out.println(" ");
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please enter "
+            + "either \"V\" or \"C\".");
+      } catch (java.lang.Exception e) {
+        System.out.println(e.getMessage());
+      }
+    }
   }
 
   /**
@@ -137,6 +177,7 @@ public class GameMaster {
       }
     }
     System.out.println("Time's up!");
+    System.out.println(" ");
   }
 
   public static void main(String[] args) {
