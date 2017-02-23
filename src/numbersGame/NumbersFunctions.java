@@ -6,6 +6,7 @@ import java.util.Random;
 
 /**
  * Class containing all functions required for numbers game.
+ * 
  * @author BothaJ
  *
  */
@@ -126,7 +127,7 @@ public class NumbersFunctions {
    * @param startPosition
    * @param input
    */
-  static void generateCombinations(int[] numbers, int choose,
+  public static void generateCombinations(int[] numbers, int choose,
       int startPosition, int[] input) {
     if (choose == 0) {
       int[] tempResult = input.clone();
@@ -153,10 +154,11 @@ public class NumbersFunctions {
       return;
     }
     for (int i = startPos; i < input.length; i++) {
-      int temp = input[i];
-      input[i] = input[startPos];
-      input[startPos] = temp;
-      generatePermutations(startPos + 1, input);
+      int[] clone = input.clone();
+      int temp = clone[i];
+      clone[i] = clone[startPos];
+      clone[startPos] = temp;
+      generatePermutations(startPos + 1, clone);
     }
   }
 

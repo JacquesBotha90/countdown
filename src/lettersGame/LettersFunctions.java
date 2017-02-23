@@ -44,6 +44,8 @@ public class LettersFunctions {
   public static ArrayList<String> validWords = new ArrayList<String>();
   public static ArrayList<String> nineLetterWords = new ArrayList<String>();
 
+  public static ArrayList<String[]> testList = new ArrayList<String[]>();
+
   /**
    * Generates the lists of valid words.
    */
@@ -232,10 +234,11 @@ public class LettersFunctions {
       return;
     }
     for (int i = startingPosition; i < input.length; i++) {
-      String temp = input[i];
-      input[i] = input[startingPosition];
-      input[startingPosition] = temp;
-      generatePermutations(startingPosition + 1, input);
+      String[] clone = input.clone();
+      String temp = clone[i];
+      clone[i] = clone[startingPosition];
+      clone[startingPosition] = temp;
+      generatePermutations(startingPosition + 1, clone);
     }
   }
 
