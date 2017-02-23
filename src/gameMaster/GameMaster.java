@@ -93,7 +93,7 @@ public class GameMaster {
     int numChosen = 0;
     int numVowels = 0;
     int numConsonants = 0;
-    while (numChosen <= 9) {
+    while (numChosen < 9) {
       try {
         System.out.println("Would you like a vowel or a consonant (V/C)?");
         String choice = sc.nextLine();
@@ -129,6 +129,64 @@ public class GameMaster {
         System.out.println(e.getMessage());
       }
     }
+
+    Thread t = new Thread() {
+      public void run() {
+        LettersFunctions.solve(letters);
+      }
+    };
+    t.start();
+
+    startTimer();
+    ArrayList<String> playerWords = new ArrayList<String>();
+    int maxLength = 0;
+
+    for (Player p : players) {
+      String word = "";
+      try {
+        System.out.println("");
+        System.out.println(p.name + ", please enter your word:");
+        word = sc.nextLine();
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input.");
+        sc.nextLine();
+      }
+      if (LettersFunctions.validWords.contains(word.toLowerCase())) {
+        System.out.println("Well done! That is a valid word.");
+        playerWords.add(word);
+        if (word.length() > maxLength) {
+          maxLength = word.length();
+        }
+      } else {
+        System.out.println("Sorry, that is not a valid word.");
+        playerWords.add("");
+      }
+    }
+
+    for (String w : playerWords) {
+      if (w.length() == maxLength) {
+        if (maxLength == 9) {
+          players.get(playerWords.indexOf(w)).addPoints(18);
+        } else {
+          players.get(playerWords.indexOf(w)).addPoints(maxLength);
+        }
+      }
+    }
+
+    System.out.println("");
+
+    System.out.println("The total number of valid words is: "
+        + LettersFunctions.validWords.size());
+    System.out.println("Highest scoring word(s):");
+    for (String s : LettersFunctions.validWords) {
+      if (s.length() == LettersFunctions.validWords.get(0).length()) {
+        System.out.println(s);
+      } else {
+        break;
+      }
+    }
+
+    System.out.println("");
   }
 
   /**
@@ -168,7 +226,7 @@ public class GameMaster {
     System.out.println("Your time starts now.");
     int timeLeft = 5;
     while (timeLeft > 0) {
-      System.out.print(timeLeft + "\r");
+      System.out.print(timeLeft + " ");
       timeLeft--;
       try {
         Thread.sleep(1000);
