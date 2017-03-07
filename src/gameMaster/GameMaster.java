@@ -195,6 +195,83 @@ public class GameMaster {
    * @param sc
    */
   public void numbersRound(Scanner sc) {
+    int numBig = -1;
+
+    while (numBig < 0 || numBig > 4) {
+      try {
+        System.out.println("How many big numbers would you like?");
+        numBig = sc.nextInt();
+        sc.nextLine();
+        if (numBig < 0) {
+          throw new java.lang.Exception("Invalid input. Please "
+              + "enter a positive value.");
+        }
+        if (numBig > 4) {
+          throw new java.lang.Exception("Invalid input. You are "
+              + "allowed up to 4 big numbers.");
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please enter a number.");
+        sc.nextLine();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
+    }
+    int[] numbers = NumbersFunctions.chooseNumbers(numBig, 6 - numBig);
+    int target = NumbersFunctions.generateTarget();
+
+    System.out.println("Your target is: " + target);
+
+    System.out.print("Your numbers are: ");
+    for (int i = 0; i < numbers.length; i++) {
+      System.out.print(numbers[i] + " ");
+    }
+    System.out.println(" ");
+
+    Thread t = new Thread() {
+      public void run() {
+        NumbersFunctions.solve(numbers, target);
+      }
+    };
+    t.start();
+
+    startTimer();
+    ArrayList<Integer> playerValue = new ArrayList<Integer>();
+    int closestDiff = 11;
+
+    for (Player p : players) {
+      int value = 0;
+      try {
+        System.out.println("");
+        System.out.println(p.name + ", what value did you get:");
+        value = sc.nextInt();
+        sc.nextLine();
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please enter a number.");
+        sc.nextLine();
+      }
+      if (Math.abs(target - value) <= 10) {
+        closestDiff = Math.abs(target - value);
+        playerValue.add(value);
+      } else {
+        playerValue.add(-1);
+      }
+    }
+
+    for (Player p : players) {
+      if (Math.abs(target - playerValue.get(players.indexOf(p))) == closestDiff) {
+        System.out.println(p.name
+            + ", please enter your solution with no spaces.");
+        String playerSolution = "";
+        try {
+          playerSolution = sc.nextLine();
+        } catch (InputMismatchException e) {
+          System.out.println("Invalid input.");
+          sc.nextLine();
+        }
+
+      }
+    }
 
   }
 
