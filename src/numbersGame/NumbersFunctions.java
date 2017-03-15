@@ -1,6 +1,7 @@
 package numbersGame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -271,4 +272,195 @@ public class NumbersFunctions {
     permutationsList.clear();
   }
 
+  /**
+   * This method checks the player's solution and returns an appropriate code.
+   * Code definitions are given below.
+   * 
+   * @param solution
+   *          String with player's solutions
+   * @param givenNumbers
+   *          The numbers the player was allowed to use.
+   * @param target
+   *          The value the player declared
+   * @return Various return codes may be given through: <br>
+   *         1 -> Players solution is valid <br>
+   *         -1 -> Player used an invalid character <br>
+   *         -2 -> Player used invalid numbers <br>
+   *         -3 -> Operator is not placed between two numbers <br>
+   *         -4 -> Incorrect brackets <br>
+   *         -5 -> Error occurred in calculation <br>
+   *         -6 -> Players solution does not equal target <br>
+   */
+  public static int checkSolution(String solution, int[] givenNumbers,
+      int target) {
+    // First check if the player used only allowed characters
+    if (!solution.matches("[0-9()+-/*//]+")) {
+      return -1;
+    }
+    // Then check if the player used the correct numbers.
+    String[] splitSolution = solution.split("[()+-/*//]");
+    ArrayList<Integer> numbersGiven = new ArrayList<>();
+    for (int i : givenNumbers) {
+      numbersGiven.add(i);
+    }
+    ArrayList<Integer> numbersUsed = new ArrayList<Integer>();
+    for (String s : splitSolution) {
+      if (!s.equals("")) {
+        numbersUsed.add(Integer.parseInt(s));
+      }
+    }
+    for (int i : numbersUsed) {
+      if (numbersGiven.contains(new Integer(i))) {
+        numbersGiven.remove(new Integer(i));
+      } else {
+        return -2;
+      }
+    }
+    // Finally check if the player's answer equals his declared value
+    solution = solution.replaceAll(" ", "");
+    ArrayList<String> charactersList = new ArrayList<>(Arrays.asList(solution
+        .split("((?<=[()+-/*//])|(?=[()+-/*//]))")));
+    try {
+      int playerAnswer = parseSolution(charactersList);
+      if (target == playerAnswer) {
+        return 1;
+      } else {
+        return -6;
+      }
+    } catch (Exception e) {
+      return Integer.parseInt(e.getMessage());
+    }
+  }
+
+  /**
+   * This function parses the solution given by the player and returns the
+   * result.
+   * 
+   * @param solution
+   *          String containing player's solution.
+   * @return
+   * @throws Exception
+   *           Throws an exception with an error code if an error is found in
+   *           the calculation.
+   */
+  public static int parseSolution(ArrayList<String> charactersList)
+      throws Exception {
+    if (charactersList.contains("(") || charactersList.contains(")")) {
+      while (charactersList.contains("(") && charactersList.contains(")")) {
+        boolean foundPair = false;
+        int openIndex = -1;
+        int closeIndex = -1;
+        for (int i = 0; i < charactersList.size(); i++) {
+          if (charactersList.get(i).equals("(")) {
+            openIndex = i;
+          } else if (charactersList.get(i).equals(")")) {
+            closeIndex = i;
+            foundPair = true;
+            break;
+          }
+        }
+        if (foundPair && openIndex != -1) {
+          ArrayList<String> innerTerm = new ArrayList<>();
+          for (int i = openIndex + 1; i < closeIndex; i++) {
+            innerTerm.add(charactersList.get(i));
+          }
+          int nestedResult = parseSolution(innerTerm);
+          for (int i = 0; i <= closeIndex - openIndex; i++) {
+            charactersList.remove(openIndex);
+          }
+          charactersList.add(openIndex, String.valueOf(nestedResult));
+        } else {
+          throw new Exception() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getMessage() {
+              return "-4";
+            }
+          };
+        }
+      }
+    }
+    performOperation(charactersList, "*/");
+    performOperation(charactersList, "+-");
+    if (charactersList.size() == 1) {
+      return Integer.parseInt(charactersList.get(0));
+    } else {
+      throw new Exception() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public String getMessage() {
+          return "-5";
+        }
+      };
+    }
+  }
+
+  /**
+   * This method will perform all the arithmetic operations of the same level of
+   * precedence and replace the characters in the characterList with the result.
+   * 
+   * @param charactersList
+   *          All the characters in the solution.
+   * @param operator
+   *          A string containing two operations to be performed with the same
+   *          level of precedence.
+   * @throws Exception
+   *           An exception is thrown with return code -3 (as a String message)
+   *           when an operator is not placed between two numbers.
+   */
+  public static void performOperation(ArrayList<String> charactersList,
+      String operator) throws Exception {
+    String[] operators = operator.split("");
+    boolean test = charactersList.contains(operators[0])
+        || charactersList.contains(operators[1]);
+    while (test) {
+      int index = 0;
+      if (charactersList.indexOf(operators[0]) == -1) {
+        index = charactersList.indexOf(operators[1]);
+      } else if (charactersList.indexOf(operators[1]) == -1) {
+        index = charactersList.indexOf(operators[0]);
+      } else {
+        index = Math.min(charactersList.indexOf(operators[0]),
+            charactersList.indexOf(operators[1]));
+      }
+
+      if (index != 0 && index != charactersList.size() - 1
+          && charactersList.get(index - 1).matches("[0-9]+")
+          && charactersList.get(index + 1).matches("[0-9]+")) {
+        int result = 0;
+        if (charactersList.get(index).equals("*")) {
+          result = Integer.parseInt(charactersList.get(index - 1))
+              * Integer.parseInt(charactersList.get(index + 1));
+        } else if (charactersList.get(index).equals("/")) {
+          result = Integer.parseInt(charactersList.get(index - 1))
+              / Integer.parseInt(charactersList.get(index + 1));
+        } else if (charactersList.get(index).equals("+")) {
+          result = Integer.parseInt(charactersList.get(index - 1))
+              + Integer.parseInt(charactersList.get(index + 1));
+        } else if (charactersList.get(index).equals("-")) {
+          result = Integer.parseInt(charactersList.get(index - 1))
+              - Integer.parseInt(charactersList.get(index + 1));
+        }
+
+        charactersList.remove(index - 1);
+        charactersList.remove(index - 1);
+        charactersList.remove(index - 1);
+        charactersList.add(index - 1, String.valueOf(result));
+
+        test = charactersList.contains(operators[0])
+            || charactersList.contains(operators[1]);
+      } else {
+        throw new Exception() {
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          public String getMessage() {
+            return "-3";
+          }
+        };
+      }
+    }
+  }
 }
