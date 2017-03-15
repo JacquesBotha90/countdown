@@ -2,12 +2,21 @@ package numbersGame;
 
 /**
  * Main method to test numbers game.
+ * 
  * @author BothaJ
  *
  */
 public class ExecuteNumbers {
 
   public static void main(String[] args) {
+
+    int[] numbers = { 1, 1, 2, 5, 10 };
+
+    System.out.println(NumbersFunctions.checkSolution("((1+1)*(5*10))",
+        numbers, 80));
+  }
+
+  public static void main2(String[] args) {
     // Start Timer
     double startTime = System.currentTimeMillis();
 
