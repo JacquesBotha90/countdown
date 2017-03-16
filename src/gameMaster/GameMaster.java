@@ -250,7 +250,8 @@ public class GameMaster {
         System.out.println("Invalid input. Please enter a number.");
         sc.nextLine();
       }
-      if (Math.abs(target - value) <= 10) {
+      if (Math.abs(target - value) <= 10
+          && Math.abs(target - value) <= closestDiff) {
         closestDiff = Math.abs(target - value);
         playerValue.add(value);
       } else {
@@ -260,8 +261,8 @@ public class GameMaster {
 
     for (Player p : players) {
       if (Math.abs(target - playerValue.get(players.indexOf(p))) == closestDiff) {
-        System.out.println(p.name
-            + ", please enter your solution with no spaces.");
+        System.out.println(" ");
+        System.out.println(p.name + ", please enter your solution.");
         String playerSolution = "";
         try {
           playerSolution = sc.nextLine();
@@ -269,7 +270,27 @@ public class GameMaster {
           System.out.println("Invalid input.");
           sc.nextLine();
         }
+        int check = NumbersFunctions.checkSolution(playerSolution, numbers,
+            playerValue.get(players.indexOf(p)));
 
+        switch (check) {
+        case 1:
+          int points = 0;
+          if (closestDiff == 0) {
+            points = 10;
+          } else if (closestDiff <= 5) {
+            points = 7;
+          } else {
+            points = 5;
+          }
+          System.out.println("Well done! That is a valid solution.");
+          p.addPoints(points);
+          break;
+        default:
+          System.out.println("Unfortunately that solution is not correct. "
+              + "No points awarded.");
+          break;
+        }
       }
     }
 
