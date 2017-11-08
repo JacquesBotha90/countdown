@@ -55,8 +55,7 @@ public class NumbersFunctions {
    */
   public static int[] chooseNumbers(int largeNumbers, int smallNumbers) {
     int[] lInts = { 25, 50, 75, 100 };
-    int[] sInts = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10,
-        10 };
+    int[] sInts = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10 };
     ArrayList<Integer> largePool = new ArrayList<Integer>(0);
     ArrayList<Integer> smallPool = new ArrayList<Integer>(0);
     for (int num : lInts) {
@@ -113,8 +112,7 @@ public class NumbersFunctions {
 
       for (ArrayList<Integer> operators : operatorList) {
         @SuppressWarnings("unused")
-        Solution testSolution = new Solution(target, numberPermutation,
-            operators);
+        Solution testSolution = new Solution(target, numberPermutation, operators);
       }
     }
   }
@@ -128,8 +126,7 @@ public class NumbersFunctions {
    * @param startPosition
    * @param input
    */
-  public static void generateCombinations(int[] numbers, int choose,
-      int startPosition, int[] input) {
+  public static void generateCombinations(int[] numbers, int choose, int startPosition, int[] input) {
     if (choose == 0) {
       int[] tempResult = input.clone();
       combinationsList.add(tempResult);
@@ -182,8 +179,7 @@ public class NumbersFunctions {
     symPermutation("", symString);
 
     @SuppressWarnings("unchecked")
-    HashSet<String> finalSet = (HashSet<String>) tempSymbolicPermutations
-        .clone();
+    HashSet<String> finalSet = (HashSet<String>) tempSymbolicPermutations.clone();
 
     // Checks the generated symbolic operator lists and removes all invalid
     // options.
@@ -221,8 +217,7 @@ public class NumbersFunctions {
       tempSymbolicPermutations.add("NN" + prefix + "O");
     } else {
       for (int i = 0; i < n; i++)
-        symPermutation(prefix + str.charAt(i),
-            str.substring(0, i) + str.substring(i + 1, n));
+        symPermutation(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n));
     }
   }
 
@@ -237,8 +232,7 @@ public class NumbersFunctions {
    */
   public static ArrayList<ArrayList<Integer>> generateOperatorList(int num) {
     @SuppressWarnings("unchecked")
-    HashSet<String> symList = (HashSet<String>) symPermutations.get(num - 2)
-        .clone();
+    HashSet<String> symList = (HashSet<String>) symPermutations.get(num - 2).clone();
     ArrayList<ArrayList<Integer>> operatorList = new ArrayList<ArrayList<Integer>>();
 
     for (String str : symList) {
@@ -291,8 +285,7 @@ public class NumbersFunctions {
    *         -5 -> Error occurred in calculation <br>
    *         -6 -> Players solution does not equal target <br>
    */
-  public static int checkSolution(String solution, int[] givenNumbers,
-      int target) {
+  public static int checkSolution(String solution, int[] givenNumbers, int target) {
     // First check if the player used only allowed characters
     if (!solution.matches("[0-9()+-/*//]+")) {
       return -1;
@@ -318,8 +311,8 @@ public class NumbersFunctions {
     }
     // Finally check if the player's answer equals his declared value
     solution = solution.replaceAll(" ", "");
-    ArrayList<String> charactersList = new ArrayList<>(Arrays.asList(solution
-        .split("((?<=[()+-/*//])|(?=[()+-/*//]))")));
+    ArrayList<String> charactersList = new ArrayList<String>(
+        Arrays.asList(solution.split("((?<=[()+-/*//])|(?=[()+-/*//]))")));
     try {
       int playerAnswer = parseSolution(charactersList);
       if (target == playerAnswer) {
@@ -343,8 +336,7 @@ public class NumbersFunctions {
    *           Throws an exception with an error code if an error is found in
    *           the calculation.
    */
-  public static int parseSolution(ArrayList<String> charactersList)
-      throws Exception {
+  public static int parseSolution(ArrayList<String> charactersList) throws Exception {
     if (charactersList.contains("(") || charactersList.contains(")")) {
       while (charactersList.contains("(") && charactersList.contains(")")) {
         boolean foundPair = false;
@@ -410,11 +402,9 @@ public class NumbersFunctions {
    *           An exception is thrown with return code -3 (as a String message)
    *           when an operator is not placed between two numbers.
    */
-  public static void performOperation(ArrayList<String> charactersList,
-      String operator) throws Exception {
+  public static void performOperation(ArrayList<String> charactersList, String operator) throws Exception {
     String[] operators = operator.split("");
-    boolean test = charactersList.contains(operators[0])
-        || charactersList.contains(operators[1]);
+    boolean test = charactersList.contains(operators[0]) || charactersList.contains(operators[1]);
     while (test) {
       int index = 0;
       if (charactersList.indexOf(operators[0]) == -1) {
@@ -422,26 +412,20 @@ public class NumbersFunctions {
       } else if (charactersList.indexOf(operators[1]) == -1) {
         index = charactersList.indexOf(operators[0]);
       } else {
-        index = Math.min(charactersList.indexOf(operators[0]),
-            charactersList.indexOf(operators[1]));
+        index = Math.min(charactersList.indexOf(operators[0]), charactersList.indexOf(operators[1]));
       }
 
-      if (index != 0 && index != charactersList.size() - 1
-          && charactersList.get(index - 1).matches("[0-9]+")
+      if (index != 0 && index != charactersList.size() - 1 && charactersList.get(index - 1).matches("[0-9]+")
           && charactersList.get(index + 1).matches("[0-9]+")) {
         int result = 0;
         if (charactersList.get(index).equals("*")) {
-          result = Integer.parseInt(charactersList.get(index - 1))
-              * Integer.parseInt(charactersList.get(index + 1));
+          result = Integer.parseInt(charactersList.get(index - 1)) * Integer.parseInt(charactersList.get(index + 1));
         } else if (charactersList.get(index).equals("/")) {
-          result = Integer.parseInt(charactersList.get(index - 1))
-              / Integer.parseInt(charactersList.get(index + 1));
+          result = Integer.parseInt(charactersList.get(index - 1)) / Integer.parseInt(charactersList.get(index + 1));
         } else if (charactersList.get(index).equals("+")) {
-          result = Integer.parseInt(charactersList.get(index - 1))
-              + Integer.parseInt(charactersList.get(index + 1));
+          result = Integer.parseInt(charactersList.get(index - 1)) + Integer.parseInt(charactersList.get(index + 1));
         } else if (charactersList.get(index).equals("-")) {
-          result = Integer.parseInt(charactersList.get(index - 1))
-              - Integer.parseInt(charactersList.get(index + 1));
+          result = Integer.parseInt(charactersList.get(index - 1)) - Integer.parseInt(charactersList.get(index + 1));
         }
 
         charactersList.remove(index - 1);
@@ -449,8 +433,7 @@ public class NumbersFunctions {
         charactersList.remove(index - 1);
         charactersList.add(index - 1, String.valueOf(result));
 
-        test = charactersList.contains(operators[0])
-            || charactersList.contains(operators[1]);
+        test = charactersList.contains(operators[0]) || charactersList.contains(operators[1]);
       } else {
         throw new Exception() {
           private static final long serialVersionUID = 1L;

@@ -8,7 +8,7 @@ package numbersGame;
  */
 public class ExecuteNumbers {
 
-  public static void main(String[] args) {
+  public static void main2(String[] args) {
 
     int[] numbers = { 1, 1, 2, 5, 10 };
 
@@ -16,7 +16,7 @@ public class ExecuteNumbers {
         numbers, 80));
   }
 
-  public static void main2(String[] args) {
+  public static void main(String[] args) {
     // Start Timer
     double startTime = System.currentTimeMillis();
 
